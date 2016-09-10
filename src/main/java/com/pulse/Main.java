@@ -1,6 +1,6 @@
 package com.pulse;
 
-import com.pulse.request.HelloWorldRequestHandler;
+import com.pulse.request.RegisterRequestHandler;
 import com.pulse.request.RequestHandler;
 import com.pulse.request.RequestHandlerChain;
 import org.telegram.telegrambots.TelegramApiException;
@@ -17,7 +17,7 @@ public class Main {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         BotSession session = null;
         try {
-            RequestHandler requestHandler = new RequestHandlerChain(Arrays.asList(new HelloWorldRequestHandler()));
+            RequestHandler requestHandler = new RequestHandlerChain(Arrays.asList(new RegisterRequestHandler()));
             BotProperties botProperties = readProperties(Main.class.getClassLoader().getResource("bot.properties"));
             session = telegramBotsApi.registerBot(new PulseBot(requestHandler, botProperties));
 

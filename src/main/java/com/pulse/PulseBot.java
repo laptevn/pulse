@@ -10,11 +10,13 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PulseBot extends TelegramLongPollingBot {
     private final RequestHandler requestHandler;
     private final BotProperties botProperties;
+    private final List<Long> registeredUsers = new LinkedList<>();
 
     public PulseBot(RequestHandler requestHandler, BotProperties botProperties) {
         this.requestHandler = requestHandler;
@@ -26,7 +28,7 @@ public class PulseBot extends TelegramLongPollingBot {
         if(update.hasMessage()){
             Message message = update.getMessage();
 
-            if (!requestHandler.handle(message, this)) {
+            if (!requestHandler.handle(message, new RequestContext(this, registeredUsers))) {
                 SendMessage sendMessageRequest = new SendMessage();
                 sendMessageRequest.setChatId(message.getChatId().toString());
                 sendMessageRequest.setText("Cannot handle your request");

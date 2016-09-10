@@ -1,7 +1,7 @@
 package com.pulse.request;
 
+import com.pulse.RequestContext;
 import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.bots.AbsSender;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class RequestHandlerChain implements RequestHandler {
     }
 
     @Override
-    public boolean handle(Message message, AbsSender sender) {
-        return handlers.stream().anyMatch(handler -> handler.handle(message, sender));
+    public boolean handle(Message message, RequestContext context) {
+        return handlers.stream().anyMatch(handler -> handler.handle(message, context));
     }
 }

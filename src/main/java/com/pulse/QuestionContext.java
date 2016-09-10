@@ -8,6 +8,10 @@ public class QuestionContext {
     private final int correctAnswerIndex;
 
     public QuestionContext(String question, List<String> answers, int correctAnswerIndex) {
+        if (correctAnswerIndex < 0 || correctAnswerIndex >= answers.size()) {
+            throw new IllegalArgumentException("Invalid index of correct answer");
+        }
+
         this.question = question;
         this.answers = answers;
         this.correctAnswerIndex = correctAnswerIndex;
