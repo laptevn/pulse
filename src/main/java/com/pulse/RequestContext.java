@@ -1,19 +1,17 @@
 package com.pulse;
 
-import org.telegram.telegrambots.bots.AbsSender;
-
 import java.util.List;
 
 public class RequestContext {
-    private final AbsSender sender;
+    private final MessageSender sender;
     private final List<Long> registeredUsers;
 
-    public RequestContext(AbsSender sender, List<Long> registeredUsers) {
+    public RequestContext(MessageSender sender, List<Long> registeredUsers) {
         this.sender = sender;
         this.registeredUsers = registeredUsers;
     }
 
-    public AbsSender getSender() {
+    public MessageSender getSender() {
         return sender;
     }
 
