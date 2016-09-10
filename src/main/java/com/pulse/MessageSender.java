@@ -16,8 +16,12 @@ public class MessageSender {
         sendMessageRequest.setChatId(chatId);
         sendMessageRequest.setText(messageText);
 
+        send(sendMessageRequest);
+    }
+
+    public void send(SendMessage message) {
         try {
-            sender.sendMessage(sendMessageRequest);
+            sender.sendMessage(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

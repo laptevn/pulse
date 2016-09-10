@@ -7,7 +7,7 @@ public class RegisterRequestHandler implements RequestHandler {
     @Override
     public boolean handle(Message message, RequestContext context) {
         if (message.hasText() && "/register".equals(message.getText())) {
-            context.getRegisteredUsers().add(message.getChatId());
+            context.getRegisteredUsers().add(message.getChatId().toString());
             context.getSender().send(message.getChatId().toString(), "Вы успешно зарегестрированы");
             return true;
         }

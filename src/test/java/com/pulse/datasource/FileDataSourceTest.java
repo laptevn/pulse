@@ -3,8 +3,6 @@ package com.pulse.datasource;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pulse.QuestionContext;
-import com.pulse.datasource.DataSource;
-import com.pulse.datasource.FileDataSource;
 import org.junit.Test;
 
 import java.io.IOException;

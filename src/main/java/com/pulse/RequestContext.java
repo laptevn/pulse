@@ -4,10 +4,10 @@ import java.util.List;
 
 public class RequestContext {
     private final MessageSender sender;
-    private final List<Long> registeredUsers;
+    private final List<String> registeredUsers;
     private final PollSession pollSession;
 
-    public RequestContext(MessageSender sender, List<Long> registeredUsers, PollSession pollSession) {
+    public RequestContext(MessageSender sender, List<String> registeredUsers, PollSession pollSession) {
         this.sender = sender;
         this.registeredUsers = registeredUsers;
         this.pollSession = pollSession;
@@ -17,7 +17,7 @@ public class RequestContext {
         return sender;
     }
 
-    public List<Long> getRegisteredUsers() {
+    public List<String> getRegisteredUsers() {
         return registeredUsers;
     }
 

@@ -1,5 +1,6 @@
 package com.pulse;
 
+import com.pulse.datasource.DataSource;
 import com.pulse.request.RequestHandler;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
@@ -11,14 +12,15 @@ import java.util.List;
 public class PulseBot extends TelegramLongPollingBot {
     private final RequestHandler requestHandler;
     private final BotProperties botProperties;
-    private final PollSession pollSession = new PollSession();
-    private final List<Long> registeredUsers = new LinkedList<>();
+    private final PollSession pollSession;
+    private final List<String> registeredUsers = new LinkedList<>(); //TODO: Use set instead of list.
     private final MessageSender messageSender;
 
-    public PulseBot(RequestHandler requestHandler, BotProperties botProperties) {
+    public PulseBot(RequestHandler requestHandler, BotProperties botProperties, DataSource dataSource) {
         this.requestHandler = requestHandler;
         this.botProperties = botProperties;
         messageSender = new MessageSender(this);
+        pollSession = new PollSession(dataSource.loadQuestions(), messageSender, new QuestionToMessageMapper());
     }
 
     @Override

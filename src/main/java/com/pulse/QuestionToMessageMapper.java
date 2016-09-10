@@ -23,7 +23,7 @@ public class QuestionToMessageMapper {
 //                sendMessageRequest.setText("you said: " + message.getText());
 //
 //                sendMessageRequest.setReplyMarkup(getAlertsKeyboard());
-        return null;
+        return new ArrayList<>();
     }
 
     // TODO: This method is an example of how create keyboard with answers for the user.

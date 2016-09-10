@@ -7,8 +7,17 @@ public class PollRequestHandler implements RequestHandler {
     @Override
     public boolean handle(Message message, RequestContext context) {
         if (message.hasText() && "/poll".equals(message.getText())) {
-            //context.getRegisteredUsers().add(message.getChatId());
-            context.getSender().send(message.getChatId().toString(), "Опрос начат");
+            String messageText;
+            if (context.getRegisteredUsers().isEmpty()) {
+                messageText = "Опрос не может быть начат. Нет зарегестрированных пользователей.";
+            } else if (context.getPollSession().isRunning()) {
+                messageText = "Опрос не может быть начат. Предыдущий опрос еще не окончен.";
+            } else {
+                context.getPollSession().start(context.getRegisteredUsers(), message.getChatId().toString());
+                messageText = "Опрос начат";
+            }
+
+            context.getSender().send(message.getChatId().toString(), messageText);
             return true;
         }
 

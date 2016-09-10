@@ -1,5 +1,6 @@
 package com.pulse;
 
+import com.pulse.datasource.FileDataSource;
 import com.pulse.request.RequestHandler;
 import com.pulse.request.RequestHandlerChainFactory;
 import org.telegram.telegrambots.TelegramApiException;
@@ -20,7 +21,13 @@ public class Main {
         try {
             RequestHandler requestHandler = new RequestHandlerChainFactory().create();
             BotProperties botProperties = readProperties(Main.class.getClassLoader().getResource("bot.properties"));
-            session = telegramBotsApi.registerBot(new PulseBot(requestHandler, botProperties));
+
+            PulseBot pulseBot;
+            try (Reader reader = new BufferedReader(new FileReader(Main.class.getClassLoader().getResource("questions.json").getFile()))) {
+                pulseBot = new PulseBot(requestHandler, botProperties, new FileDataSource(reader));
+            }
+
+            session = telegramBotsApi.registerBot(pulseBot);
 
             new Scanner(System.in).nextLine();
         } catch (TelegramApiException e) {
