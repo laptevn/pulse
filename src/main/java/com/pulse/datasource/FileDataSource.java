@@ -1,7 +1,8 @@
-package com.pulse;
+package com.pulse.datasource;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.pulse.QuestionContext;
 
 import java.io.Reader;
 import java.lang.reflect.Type;

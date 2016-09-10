@@ -1,8 +1,6 @@
 package com.pulse;
 
 import com.pulse.request.RequestHandler;
-import org.telegram.telegrambots.TelegramApiException;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -13,11 +11,14 @@ import java.util.List;
 public class PulseBot extends TelegramLongPollingBot {
     private final RequestHandler requestHandler;
     private final BotProperties botProperties;
+    private final PollSession pollSession = new PollSession();
     private final List<Long> registeredUsers = new LinkedList<>();
+    private final MessageSender messageSender;
 
     public PulseBot(RequestHandler requestHandler, BotProperties botProperties) {
         this.requestHandler = requestHandler;
         this.botProperties = botProperties;
+        messageSender = new MessageSender(this);
     }
 
     @Override
@@ -25,16 +26,8 @@ public class PulseBot extends TelegramLongPollingBot {
         if(update.hasMessage()){
             Message message = update.getMessage();
 
-            if (!requestHandler.handle(message, new RequestContext(new MessageSender(this), registeredUsers))) {
-                SendMessage sendMessageRequest = new SendMessage();
-                sendMessageRequest.setChatId(message.getChatId().toString());
-                sendMessageRequest.setText("Cannot handle your request");
-
-                try {
-                    sendMessage(sendMessageRequest);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+            if (!requestHandler.handle(message, new RequestContext(messageSender, registeredUsers, pollSession))) {
+                messageSender.send(message.getChatId().toString(), "Cannot handle your request");
             }
         }
     }
