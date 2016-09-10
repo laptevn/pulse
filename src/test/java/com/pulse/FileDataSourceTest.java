@@ -42,8 +42,6 @@ public class FileDataSourceTest {
             DataSource dataSource = new FileDataSource(reader);
             List<QuestionContext> loadedContexts = dataSource.loadQuestions();
 
-            System.out.println(questionContexts);
-            System.out.println(loadedContexts);
             assertEquals(questionContexts, loadedContexts);
         }
     }
