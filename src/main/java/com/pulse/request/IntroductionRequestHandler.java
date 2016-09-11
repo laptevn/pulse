@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class IntroductionRequestHandler implements RequestHandler {
+public class IntroductionRequestHandler  implements RequestHandler {
     private static final Set<String> INTRODUCTION_REQUEST = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("/start", "/")));
     private String MESSAGE_RESPONSE;
 
@@ -19,7 +19,6 @@ public class IntroductionRequestHandler implements RequestHandler {
     @Override
     public boolean handle(Message message, RequestContext context) {
         if (message.hasText() && INTRODUCTION_REQUEST.contains(message.getText())) {
-            context.getRegisteredUsers().add(message.getChatId().toString());
             context.getSender().send(message.getChatId().toString(), MESSAGE_RESPONSE);
             return true;
         }

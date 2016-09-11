@@ -11,7 +11,6 @@ public class RequestHandlerChainFactory {
                 new PollRequestHandler(),
                 new AnswerRequestHandler(),
                 new IntroductionRequestHandler(botProperties.getIntroductionMessage()),
-                new PollRequestHandler(),
-                new AnswerRequestHandler()));
+                new PollRequestHandler()));
     }
 }
