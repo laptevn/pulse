@@ -7,6 +7,7 @@ public class RequestHandlerChainFactory {
         return new RequestHandlerChain(Arrays.asList(
                 new RegisterRequestHandler(),
                 new IntroductionRequestHandler(),
-                new PollRequestHandler()));
+                new PollRequestHandler(),
+                new AnswerRequestHandler()));
     }
 }

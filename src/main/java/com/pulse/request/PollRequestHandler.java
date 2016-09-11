@@ -13,7 +13,7 @@ public class PollRequestHandler implements RequestHandler {
             } else if (context.getPollSession().isRunning()) {
                 messageText = "Опрос не может быть начат. Предыдущий опрос еще не окончен.";
             } else {
-                context.getPollSession().start(context.getRegisteredUsers(), message.getChatId().toString());
+                context.getPollSession().startPolling(context.getRegisteredUsers(), message.getChatId().toString());
                 messageText = "Опрос начат";
             }
 
