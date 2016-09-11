@@ -11,10 +11,12 @@ public class PollCalculator {
     private int numberOfUsersWithAnswers;
     private final Set<String> usersWithCorrectAnswers = new HashSet<>();
     private final Map<Integer, Integer> answerToCount = new HashMap<>();
+    private final ChartFactory chartFactory;
 
-    public PollCalculator(QuestionContext questionContext, int numberOfRegisteredUsers) {
+    public PollCalculator(QuestionContext questionContext, int numberOfRegisteredUsers, ChartFactory chartFactory) {
         this.questionContext = questionContext;
         this.numberOfRegisteredUsers = numberOfRegisteredUsers;
+        this.chartFactory = chartFactory;
     }
 
     public void updateState(String userId, int answer) {
@@ -47,10 +49,16 @@ public class PollCalculator {
 
         for (AnswerCountPair pair : getAnswersSortedByCount()) {
             result.append(System.lineSeparator());
-            result.append(pair.count).append(" человек выбрали вариант №").append(pair.answer);
+            result.append(pair.getCount()).append(" человек выбрали вариант №").append(pair.getAnswer());
         }
 
         return result.toString();
+    }
+
+    public byte[] calculateGeneralChart() {
+        return chartFactory.createBarChart(answerToCount.entrySet().stream()
+                .map(entry -> new AnswerCountPair(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList()));
     }
 
     private List<AnswerCountPair> getAnswersSortedByCount() {
@@ -62,20 +70,5 @@ public class PollCalculator {
 
     public String calculatePersonalResult(String userId) {
         return usersWithCorrectAnswers.contains(userId) ? "Поздравляем, вы дали правильный ответ." : "Вы не дали правильный ответ.";
-    }
-
-    private static class AnswerCountPair implements Comparable<AnswerCountPair> {
-        public final Integer answer;
-        public final Integer count;
-
-        public AnswerCountPair(Integer answer, Integer count) {
-            this.answer = answer;
-            this.count = count;
-        }
-
-        @Override
-        public int compareTo(AnswerCountPair o) {
-            return -count.compareTo(o.count);
-        }
     }
 }

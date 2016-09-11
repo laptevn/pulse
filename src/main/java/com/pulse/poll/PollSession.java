@@ -42,7 +42,7 @@ public class PollSession {
         registeredUsers = new HashSet<>(users);
         questionToMessageMapper.map(getCurrentQuestion(), registeredUsers).forEach(sender::send);
 
-        pollCalculator = new PollCalculator(getCurrentQuestion(), registeredUsers.size());
+        pollCalculator = new PollCalculator(getCurrentQuestion(), registeredUsers.size(), new ChartFactory());
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -69,11 +69,16 @@ public class PollSession {
     }
 
     private void sendPollingResults() {
+        byte[] chartData = pollCalculator.calculateGeneralChart();
         String generalResult = pollCalculator.calculateGeneralResult();
         sender.send(pollOwner, generalResult);
+        sender.sendImage(pollOwner, chartData);
 
         registeredUsers.forEach(
-                chatId -> sender.send(chatId, String.format("%s%n%s", generalResult, pollCalculator.calculatePersonalResult(chatId))));
+                chatId -> {
+                    sender.send(chatId, String.format("%s%n%s", generalResult, pollCalculator.calculatePersonalResult(chatId)));
+                    sender.sendImage(chatId, chartData);
+                });
     }
 
     public synchronized boolean isRunning() {
