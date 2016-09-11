@@ -7,29 +7,39 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class QuestionToMessageMapper {
     public List<SendMessage> map(QuestionContext questionContext, Collection<String> chatIds) {
-        // TODO: We should create the list of SendMessage instances for each chatId.
-        // Message should contain the question text and all answers numbered 1-N, where N is the number of answers.
-        // For example:
-        // Кто президент России?
-        // 1. Кадыров
-        // 2. Путин
-        // 3. Киркоров
-        // 4. Обама
+        String message = toMessage(questionContext);
+        ReplyKeyboardMarkup keyboard = getKeyboard(questionContext.getAnswers().size());
 
-//                SendMessage sendMessageRequest = new SendMessage();
-//                sendMessageRequest.setChatId(message.getChatId().toString());
-//                sendMessageRequest.setText("you said: " + message.getText());
-//
-//                sendMessageRequest.setReplyMarkup(getAlertsKeyboard());
-        return new ArrayList<>();
+        return chatIds.stream().map(chatId -> {
+            SendMessage sendMessageRequest = new SendMessage();
+            sendMessageRequest.setChatId(chatId);
+            sendMessageRequest.setText(message);
+            sendMessageRequest.setReplyMarkup(keyboard);
+            return sendMessageRequest;
+        }).collect(Collectors.toList());
     }
 
-    // TODO: This method is an example of how create keyboard with answers for the user.
-    // We should update it so that the user have N buttons with numbers 1-N, where N is the number of answers to the question.
-    private static ReplyKeyboardMarkup getAlertsKeyboard() {
+    private String toMessage(QuestionContext questionContext) {
+        StringBuilder result = new StringBuilder();
+        result.append(questionContext.getQuestion());
+        result.append(System.lineSeparator());
+        result.append("Варианты ответов:");
+
+        for (int i = 0; i < questionContext.getAnswers().size(); ++i) {
+            result.append(System.lineSeparator());
+            result.append(i + 1);
+            result.append(". ");
+            result.append(questionContext.getAnswers().get(i));
+        }
+
+        return result.toString();
+    }
+
+    private static ReplyKeyboardMarkup getKeyboard(int numberOfAnswers) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
@@ -38,13 +48,9 @@ public class QuestionToMessageMapper {
         List<KeyboardRow> keyboard = new ArrayList<>();
 
         KeyboardRow row = new KeyboardRow();
-        row.add("row1 command1");
-        row.add("row1 command2");
-        keyboard.add(row);
-
-        row = new KeyboardRow();
-        row.add("row2 command1");
-        row.add("row2 command2");
+        for (int i = 1; i <= numberOfAnswers; ++i) {
+            row.add(Integer.toString(i));
+        }
         keyboard.add(row);
 
         replyKeyboardMarkup.setKeyboard(keyboard);

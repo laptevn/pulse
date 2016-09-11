@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class PollSession {
-    private final static long POLL_DURATION = TimeUnit.SECONDS.toMillis(2);
+    private final static long POLL_DURATION = TimeUnit.SECONDS.toMillis(60);
 
     private final List<QuestionContext> questionContexts;
     private int currentQuestionIndex = -1;
