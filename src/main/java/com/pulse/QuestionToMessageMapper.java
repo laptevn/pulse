@@ -5,10 +5,11 @@ import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class QuestionToMessageMapper {
-    public List<SendMessage> map(QuestionContext questionContext, List<String> chatIds) {
+    public List<SendMessage> map(QuestionContext questionContext, Collection<String> chatIds) {
         // TODO: We should create the list of SendMessage instances for each chatId.
         // Message should contain the question text and all answers numbered 1-N, where N is the number of answers.
         // For example:

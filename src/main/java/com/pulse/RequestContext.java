@@ -1,13 +1,15 @@
 package com.pulse;
 
-import java.util.List;
+import com.pulse.poll.PollSession;
+
+import java.util.Set;
 
 public class RequestContext {
     private final MessageSender sender;
-    private final List<String> registeredUsers;
+    private final Set<String> registeredUsers;
     private final PollSession pollSession;
 
-    public RequestContext(MessageSender sender, List<String> registeredUsers, PollSession pollSession) {
+    public RequestContext(MessageSender sender, Set<String> registeredUsers, PollSession pollSession) {
         this.sender = sender;
         this.registeredUsers = registeredUsers;
         this.pollSession = pollSession;
@@ -17,7 +19,7 @@ public class RequestContext {
         return sender;
     }
 
-    public List<String> getRegisteredUsers() {
+    public Set<String> getRegisteredUsers() {
         return registeredUsers;
     }
 

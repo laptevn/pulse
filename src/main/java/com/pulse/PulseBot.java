@@ -1,19 +1,20 @@
 package com.pulse;
 
 import com.pulse.datasource.DataSource;
+import com.pulse.poll.PollSession;
 import com.pulse.request.RequestHandler;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PulseBot extends TelegramLongPollingBot {
     private final RequestHandler requestHandler;
     private final BotProperties botProperties;
     private final PollSession pollSession;
-    private final List<String> registeredUsers = new LinkedList<>(); //TODO: Use set instead of list.
+    private final Set<String> registeredUsers = new HashSet<>();
     private final MessageSender messageSender;
 
     public PulseBot(RequestHandler requestHandler, BotProperties botProperties, DataSource dataSource) {
@@ -29,7 +30,7 @@ public class PulseBot extends TelegramLongPollingBot {
             Message message = update.getMessage();
 
             if (!requestHandler.handle(message, new RequestContext(messageSender, registeredUsers, pollSession))) {
-                messageSender.send(message.getChatId().toString(), "Cannot handle your request");
+                messageSender.send(message.getChatId().toString(), "Не могу обработать ваш запрос.");
             }
         }
     }

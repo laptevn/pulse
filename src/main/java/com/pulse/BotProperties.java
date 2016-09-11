@@ -7,6 +7,7 @@ import java.util.Properties;
 public class BotProperties {
     private final String name;
     private final String token;
+    private final String introductionMessage;
 
     public BotProperties(Reader propertiesReader) throws IOException {
         Properties properties = new Properties();
@@ -14,6 +15,7 @@ public class BotProperties {
 
         name = properties.getProperty("name");
         token = properties.getProperty("token");
+        introductionMessage = properties.getProperty("introductionMessage");
     }
 
     public String getName() {
@@ -22,5 +24,9 @@ public class BotProperties {
 
     public String getToken() {
         return token;
+    }
+
+    public String getIntroductionMessage() {
+        return introductionMessage;
     }
 }
