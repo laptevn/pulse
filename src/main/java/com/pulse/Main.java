@@ -19,8 +19,8 @@ public class Main {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         BotSession session = null;
         try {
-            RequestHandler requestHandler = new RequestHandlerChainFactory().create();
             BotProperties botProperties = readProperties(Main.class.getClassLoader().getResource("bot.properties"));
+            RequestHandler requestHandler = new RequestHandlerChainFactory().create(botProperties);
 
             PulseBot pulseBot;
             try (Reader reader = new BufferedReader(new FileReader(Main.class.getClassLoader().getResource("questions.json").getFile()))) {
