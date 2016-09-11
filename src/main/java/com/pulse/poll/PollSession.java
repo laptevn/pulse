@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit;
 public class PollSession {
     private final static long POLL_DURATION = TimeUnit.SECONDS.toMillis(2);
 
-    private final List<QuestionContext> questionContexts; // TODO: Add a support of traversing through this list.
+    private final List<QuestionContext> questionContexts;
+    private int currentQuestionIndex = -1;
     private final MessageSender sender;
     private final QuestionToMessageMapper questionToMessageMapper;
     private String pollOwner;
@@ -33,8 +34,13 @@ public class PollSession {
         this.pollOwner = pollOwner;
         isRunning = true;
 
+        currentQuestionIndex++;
+        if (currentQuestionIndex >= questionContexts.size()) {
+            currentQuestionIndex = 0;
+        }
+
         registeredUsers = new HashSet<>(users);
-        questionToMessageMapper.map(getCurrentQuestion(), registeredUsers).forEach(message -> sender.send(message));
+        questionToMessageMapper.map(getCurrentQuestion(), registeredUsers).forEach(sender::send);
 
         pollCalculator = new PollCalculator(getCurrentQuestion(), registeredUsers.size());
 
@@ -48,7 +54,7 @@ public class PollSession {
     }
 
     private QuestionContext getCurrentQuestion() {
-        return questionContexts.get(0);
+        return questionContexts.get(currentQuestionIndex);
     }
 
     private synchronized void stopPolling() {
@@ -79,9 +85,11 @@ public class PollSession {
     }
 
     public synchronized void handleAnswer(String userId, int answer) {
-        pollCalculator.updateState(userId, answer);
-        if (pollCalculator.allUsersGaveAnswers()) {
-            stopPolling();
+        if (isRunning) {
+            pollCalculator.updateState(userId, answer);
+            if (pollCalculator.allUsersGaveAnswers()) {
+                stopPolling();
+            }
         }
     }
 }
