@@ -3,13 +3,17 @@ package com.pulse;
 import com.pulse.datasource.DataSource;
 import com.pulse.poll.PollSession;
 import com.pulse.request.RequestHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+@Component
 public class PulseBot extends TelegramLongPollingBot {
     private final RequestHandler requestHandler;
     private final BotProperties botProperties;
@@ -17,7 +21,8 @@ public class PulseBot extends TelegramLongPollingBot {
     private final Set<String> registeredUsers = new HashSet<>();
     private final MessageSender messageSender;
 
-    public PulseBot(RequestHandler requestHandler, BotProperties botProperties, DataSource dataSource) {
+    @Autowired
+    public PulseBot(RequestHandler requestHandler, BotProperties botProperties, DataSource dataSource) throws IOException {
         this.requestHandler = requestHandler;
         this.botProperties = botProperties;
         messageSender = new MessageSender(this);
