@@ -97,4 +97,10 @@ public class PollSession {
             }
         }
     }
+
+    public synchronized String getStatus() {
+        return isRunning()
+                ? String.format("Опрос выполняется. В нем участвует %d человек", registeredUsers.size())
+                : "Опрос не выполняется.";
+    }
 }
