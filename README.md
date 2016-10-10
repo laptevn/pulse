@@ -1,4 +1,5 @@
 Pulse
+
 Telegram chat bot for creating a short and quick polling.
 This is a POC project started on EdHack: ChatBots hackathon (http://edhack.misis.ru/).
 Project state is still a POC.
